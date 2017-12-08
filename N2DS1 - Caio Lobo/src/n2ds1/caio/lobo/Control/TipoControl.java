@@ -7,10 +7,10 @@ package n2ds1.caio.lobo.Control;
 
 import java.sql.SQLException;
 import java.util.List;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import n2ds1.caio.lobo.DAOs.ImovelDAO;
 import n2ds1.caio.lobo.DAOs.TipoDAO;
 import n2ds1.caio.lobo.model.Imovel;
 import n2ds1.caio.lobo.model.Tipo;
@@ -76,4 +76,13 @@ public class TipoControl {
         TipoDAO t = new TipoDAO();
         return  t.listarTodos();
     }
+
+    public List listarImoveis(Long id) {
+      ImovelDAO dao = new ImovelDAO();
+    
+      return  dao.listarPorTipo(id);
+      
+    }
+
+    
 }

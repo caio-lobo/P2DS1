@@ -6,6 +6,7 @@
 package n2ds1.caio.lobo.DAOs;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -93,12 +94,34 @@ public class ImovelDAO implements IDAO{
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("N2DS1-CaioLoboPU");
         EntityManager em = emf.createEntityManager();
         
-        TypedQuery<Imovel> query = em.createQuery("select c from Imovel c where id ="+id+"", Imovel.class);
-        List<Imovel> list = query.getResultList();
+        Imovel i = em.find(Imovel.class, id);
         
         em.close();
         emf.close();
-        return list;
+        return i;
+    }
+
+    public List listarPorTipo(Long id) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("N2DS1-CaioLoboPU");
+        EntityManager em = emf.createEntityManager();
+        
+        TypedQuery<Imovel> query = em.createQuery("select c from Imovel c", Imovel.class);
+        
+        List<Imovel> list = query.getResultList();
+        List<Imovel> result = new ArrayList<>();
+        result.clear();
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getTipo().getId() == id){
+                result.add(list.get(i));
+            }
+            
+        }
+        
+        
+        em.close();
+        emf.close();
+        return result;
+        
     }
     
 }

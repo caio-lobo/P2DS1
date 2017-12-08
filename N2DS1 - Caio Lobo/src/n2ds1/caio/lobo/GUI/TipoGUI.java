@@ -6,6 +6,7 @@
 package n2ds1.caio.lobo.GUI;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -211,7 +212,7 @@ public class TipoGUI extends javax.swing.JFrame {
                     .addComponent(btmNovo)
                     .addComponent(btmEditar)
                     .addComponent(btmRemover))
-                .addGap(174, 174, 174))
+                .addContainerGap())
         );
 
         pack();
@@ -226,7 +227,7 @@ public class TipoGUI extends javax.swing.JFrame {
            
             controle.excluir(controle.getTipoPorId(Long.parseLong(txtID.getText())));
         } catch (SQLException ex) {
-            Logger.getLogger(ImovelGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TipoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btmRemoverActionPerformed
 
@@ -247,13 +248,13 @@ public class TipoGUI extends javax.swing.JFrame {
         try {
             control.gravar(i);
         } catch (SQLException ex) {
-            Logger.getLogger(ImovelGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TipoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         try {
             atualizarListaTipos();
         } catch (SQLException ex) {
-            Logger.getLogger(ImovelGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TipoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         textClear();
         
@@ -295,16 +296,13 @@ public class TipoGUI extends javax.swing.JFrame {
             textClear();
             
             Tipo i =  controle.getTipoPorId((Long) o);
+            i.setImoveis(controle.listarImoveis(i.getId()));
             
             
             txtDescricao.setText(i.getDescricao());
             txtID.setText(i.getId().toString());
             txtNome.setText(i.getNome());
-            DefaultListModel model = (DefaultListModel) listImoveis.getModel();
-            model.clear();
-            for(Imovel v : i.getImoveis()){
-                model.addElement(v);
-            }
+            setListImoveis(i);
             
           
         } catch (SQLException ex) {
@@ -344,13 +342,11 @@ public class TipoGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new TipoGUI().setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(TipoGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new TipoGUI().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TipoGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -388,8 +384,9 @@ public class TipoGUI extends javax.swing.JFrame {
         txtID.setText("Gerado Automaticamente");
         txtDescricao.setText("");
         txtDescricao.setEnabled(false);
-        txtNome.setText(" ");
+        txtNome.setText("");
         txtNome.setEnabled(false);
+        
         listImoveis.removeAll();
     }
 
@@ -431,5 +428,14 @@ public class TipoGUI extends javax.swing.JFrame {
     private void buttonEditSet() {
       buttonNewSet();
       btmRemover.setEnabled(true);
+    }
+
+    private void setListImoveis(Tipo t) {
+     DefaultListModel model = (DefaultListModel) listImoveis.getModel();
+     TipoControl control = new TipoControl();
+                model.clear();
+                for(Imovel ri: t.getImoveis()){
+                    model.addElement(ri);
+                }
     }
 }

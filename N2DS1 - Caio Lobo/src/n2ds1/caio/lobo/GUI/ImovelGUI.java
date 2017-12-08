@@ -336,10 +336,13 @@ public class ImovelGUI extends javax.swing.JFrame {
         
         if(tblImoveis.getSelectedRowCount()>0){
         ImovelControl controle = new ImovelControl();
-                
+        
+
+        textClear();
+        
         Object o = ((DefaultTableModel) tblImoveis.getModel()).getValueAt(tblImoveis.getSelectedRow(),0);
         try{
-            textClear();
+            
             
             Imovel i =  controle.getImovelPorId((Long) o);
             Tipo t = i.getTipo();
@@ -348,10 +351,9 @@ public class ImovelGUI extends javax.swing.JFrame {
             txtDesc.setText(i.getDescricao());
             txtID.setText(i.getId().toString());
             txtNome.setText(i.getNome());
-            cbbTipo.removeAllItems();
-            cbbTipo.addItem(t);
-            cbbTipo.setSelectedIndex(1);
-          
+            atualizarCombo();
+            cbbTipo.setSelectedItem(t);
+            
         } catch (SQLException ex) {
             Logger.getLogger(ImovelGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -377,7 +379,7 @@ public class ImovelGUI extends javax.swing.JFrame {
     private void btmUpdateTiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btmUpdateTiposActionPerformed
         try {
             // TODO add your handling code here:
-            AtualizarCombo();
+            atualizarCombo();
         } catch (SQLException ex) {
             Logger.getLogger(ImovelGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -479,11 +481,11 @@ public class ImovelGUI extends javax.swing.JFrame {
     }
 
     private void textClear() {
-     txtAreaConstruida.setText("         "); 
-     txtAreaTotal.setText("             "); 
-     txtDesc.setText(" "); 
+     txtAreaConstruida.setText(""); 
+     txtAreaTotal.setText(""); 
+     txtDesc.setText(""); 
      txtID.setText("Gerado Automaticamente"); 
-     txtNome.setText(" "); 
+     txtNome.setText(""); 
      cbbTipo.setSelectedIndex(-1);
      textDisable();
     
@@ -496,9 +498,9 @@ public class ImovelGUI extends javax.swing.JFrame {
         
     }
     
-    private void AtualizarCombo() throws SQLException{
+    private void atualizarCombo() throws SQLException{
         TipoControl controle = new TipoControl();
-        
+        cbbTipo.setEnabled(true);
         cbbTipo.removeAllItems();
         List tipo = controle.listarTipos();
         

@@ -78,7 +78,7 @@ public class TipoDAO implements IDAO{
          EntityManagerFactory emf = Persistence.createEntityManagerFactory("N2DS1-CaioLoboPU");
         EntityManager em = emf.createEntityManager();
         
-        TypedQuery<Tipo> query = em.createQuery("select c from Imovel c", Tipo.class);
+        TypedQuery<Tipo> query = em.createQuery("select c from Tipo c", Tipo.class);
         List<Tipo> list = query.getResultList();
         
         em.close();
@@ -92,8 +92,7 @@ public class TipoDAO implements IDAO{
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("N2DS1-CaioLoboPU");
         EntityManager em = emf.createEntityManager();
         
-        TypedQuery<Tipo> query = em.createQuery("select c from Tipo c where id ="+id+"", Tipo.class);
-        List<Tipo> list = query.getResultList();
+        Tipo list = em.find(Tipo.class, id);
         
         em.close();
         emf.close();
